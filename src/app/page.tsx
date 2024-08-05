@@ -1,95 +1,78 @@
-import Image from "next/image";
+'use client';
+import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
+import { DynamicAnimationOptions, motion, stagger, useAnimate, useInView } from "framer-motion";
+
+enum Direction {
+  "left", "right"
+}
+interface DevBannerProps {
+  transformTemplate:(transform: any, generatedTransform: string) => string,
+  direction: Direction,
+}
+
+function DevInProgBanner({transformTemplate, direction}: DevBannerProps) {
+  return (
+    <motion.div
+      transformTemplate={transformTemplate}
+      className={`${styles.dipShadowWrap}` + `${direction == Direction.left ? " leftBanner" : " rightBanner"}`}>
+      <div className={styles.dipBanner}>
+          {[...Array(15)].map((val, index) =><span aria-hidden key={index + '_child'} className={styles.dipText}>SOFTWARE DEVELOPMENT IN PROGRESS</span>)}
+      </div>
+    </motion.div>
+  )
+}
+
+function DancingDownArrow() {
+  return (
+    <motion.span
+      className={styles.helloScrollIcon}
+      animate={{y: [-5, 25]}}
+      transition={{repeat: Infinity, repeatType: "reverse", ease: "easeInOut",duration: 1}}
+    >
+      ↓
+    </motion.span>)
+}
 
 export default function Home() {
+
+  const [ scope, animator ] = useAnimate();
+  const viewRef = useRef(null);
+  const isInView = useInView(viewRef, {amount: 0.1, once: true});
+
+  const pretransform = (_: any, generated: string) => `perspective(10cm) rotate(var(--tapeAngle)) translate3D(0, 0, var(--tapeDepth)) ${generated}`
+
+  const bannerAnimOptions: DynamicAnimationOptions = {ease: "easeInOut", duration: 1.4, delay: stagger(0.2, {startDelay: 0.8, from: "first"})}
+
+  useEffect(() => {
+      let leftAnim = animator(".leftBanner", { x: "120vw" }, bannerAnimOptions);
+      let rightAnim = animator(".rightBanner", { x: "-120vw" }, bannerAnimOptions);
+      if (isInView) {
+        leftAnim.play();
+        rightAnim.play();
+      } else {
+          leftAnim.stop();
+          rightAnim.stop();
+      }
+  }, [isInView, animator, bannerAnimOptions]);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <main ref={scope}className={styles.main}>
+      <section className={styles.intro}>
+        <h1 className={styles.helloHeader}>Hello, my name is <span className={styles.helloName}>Avi  Dargan</span></h1>
+        <h2 className={styles.helloSubheader}>Software Engineer</h2>
+        <div className={styles.helloScrollNotice}><DancingDownArrow/>see my work<DancingDownArrow/></div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </section>
+      <section ref={viewRef} className={styles.hiddenProjectBackground}>
+        {[...Array(8)].map((val, index) =>
+          <DevInProgBanner
+            key={index}
+            direction={index % 2 == 0 ? Direction.left : Direction.right}
+            transformTemplate={pretransform}
+          />
+        )}
+      </section>
     </main>
   );
 }
