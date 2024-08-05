@@ -5,7 +5,7 @@ import "./globals.css";
 const roboto = Roboto({ subsets: ["latin"], weight: ["100", "300", "400", "500", "700", "900"] });
 
 export const metadata: Metadata = {
-  title: "Avi Dargan, Software Engineer",
+  title: "Avi Dargan - Software Engineer",
   description: "A website by Avi Dargan",
 };
 
