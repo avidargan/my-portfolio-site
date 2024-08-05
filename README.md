@@ -8,3 +8,6 @@ Used to showcase my other projects.
 Uses:
 - Next.js (React framework)
 - Framer Motion (animation library)
+
+Credits:
+- Deploy script by [gregrickaby](https://github.com/gregrickaby/nextjs-github-pages)
