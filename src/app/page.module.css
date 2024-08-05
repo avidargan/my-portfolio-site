@@ -82,6 +82,7 @@
   animation-play-state: paused;
 
   transform: perspective(10cm) rotate(var(--tapeAngle)) translate3D(0, 0, var(--tapeDepth));
+  bottom: var(--tapeBottomDistance);
 }
 
 .dipBanner {
@@ -103,49 +104,49 @@
 .dipShadowWrap:nth-child(1) {
   --tapeAngle: -12deg;
   --tapeDepth: 0.1cm;
-  bottom: 10vh;
+  --tapeBottomDistance: 10vh;
 }
 
 .dipShadowWrap:nth-child(2) {
   --tapeAngle: 18deg;
   --tapeDepth: 0.2cm;
-  bottom: 20vh;
+  --tapeBottomDistance: 20vh;
 }
 
 .dipShadowWrap:nth-child(3) {
   --tapeAngle: -8deg;
   --tapeDepth: 0.3cm;
-  bottom: 30vh;
+  --tapeBottomDistance: 30vh;
 }
 
 .dipShadowWrap:nth-child(4) {
   --tapeAngle: 10deg;
   --tapeDepth: 0.4cm;
-  bottom: 35vh;
+  --tapeBottomDistance: 35vh;
 }
 
 .dipShadowWrap:nth-child(5) {
   --tapeAngle: -4deg;
   --tapeDepth: 0.4cm;
-  bottom: 65vh;
+  --tapeBottomDistance: 65vh;
 }
 
 .dipShadowWrap:nth-child(6) {
   --tapeAngle: -4deg;
   --tapeDepth: 0.5cm;
-  bottom: 50vh;
+  --tapeBottomDistance: 50vh;
 }
 
 .dipShadowWrap:nth-child(7) {
   --tapeAngle: 10deg;
   --tapeDepth: 0.6cm;
-  bottom: 80vh;
+  --tapeBottomDistance: 80vh;
 }
 
 .dipShadowWrap:nth-child(8) {
   --tapeAngle: -15deg;
   --tapeDepth: 0.7cm;
-  bottom: 80vh;
+  --tapeBottomDistance: 80vh;
 }
 
 .dipShadowWrap:nth-child(2n + 1) {
@@ -201,6 +202,10 @@
 
   .intro {
     flex-direction: column;
+  }
+
+  .dipShadowWrap {
+    bottom: calc((var(--tapeBottomDistance)) - 6dvh);
   }
 }
 
