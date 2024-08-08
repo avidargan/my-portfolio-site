@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
-import { DynamicAnimationOptions, motion, stagger, useAnimate, useInView } from "framer-motion";
+import { AnimationSequence, At, DynamicAnimationOptions, motion, stagger, useAnimate, useInView } from "framer-motion";
 
 enum Direction {
   "left", "right"
@@ -17,7 +17,7 @@ function DevInProgBanner({transformTemplate, direction}: DevBannerProps) {
       transformTemplate={transformTemplate}
       className={`${styles.dipShadowWrap}` + `${direction == Direction.left ? " leftBanner" : " rightBanner"}`}>
       <div className={styles.dipBanner}>
-          {[...Array(15)].map((val, index) =><span aria-hidden key={index + '_child'} className={styles.dipText}>SOFTWARE DEVELOPMENT IN PROGRESS</span>)}
+          {[...Array(15)].map((val, index) =><div aria-hidden role="presentation" key={index + '_child'} className={styles.dipText}>SOFTWARE DEVELOPMENT IN PROGRESS</div>)}
       </div>
     </motion.div>
   )
@@ -37,24 +37,33 @@ function DancingDownArrow() {
 export default function Home() {
 
   const [ scope, animator ] = useAnimate();
+
   const viewRef = useRef(null);
+
   const isInView = useInView(viewRef, {amount: 0.1, once: true});
 
   const pretransform = (_: any, generated: string) => `perspective(10cm) rotate(var(--tapeAngle)) translate3D(0, 0, var(--tapeDepth)) ${generated}`
 
-  const bannerAnimOptions: DynamicAnimationOptions = {ease: "easeInOut", duration: 1.4, delay: stagger(0.2, {startDelay: 0.8, from: "first"})}
-
+  const bannerAnimOptions: DynamicAnimationOptions & At = {ease: "easeInOut", duration: 1.4, delay: stagger(0.2, {startDelay: 0.8, from: "first"}), at : "<"};
+  const projectAnimOptions: DynamicAnimationOptions = {type: "spring", duration: 1.2, delay: stagger(0.2, {from: "first"})}
+  const footerAnimOptions: DynamicAnimationOptions = {ease: "easeInOut", duration: 0.8} 
   useEffect(() => {
-      let leftAnim = animator(".leftBanner", { x: "120vw" }, bannerAnimOptions);
-      let rightAnim = animator(".rightBanner", { x: "-120vw" }, bannerAnimOptions);
+      const sequence: AnimationSequence = [
+        [".leftBanner", {x: "120vw"}, bannerAnimOptions],
+        [".rightBanner", {x: "-120vw"}, bannerAnimOptions],
+        [".thumb", {y: ["200vh", 0]}, projectAnimOptions],
+        [".footer", {width: [0, "200px"]}, footerAnimOptions],
+      ]
+
+      let animation = animator(sequence);
+
       if (isInView) {
-        leftAnim.play();
-        rightAnim.play();
+        animation.play();
       } else {
-          leftAnim.stop();
-          rightAnim.stop();
+        animation.stop();
       }
-  }, [isInView, animator, bannerAnimOptions]);
+  }, [isInView, animator, bannerAnimOptions, projectAnimOptions, footerAnimOptions]);
+
 
   return (
     <main ref={scope}className={styles.main}>
@@ -72,6 +81,16 @@ export default function Home() {
             transformTemplate={pretransform}
           />
         )}
+        <div className={styles.featuredProjectsContainer}>
+          <h2 className={`${styles.featuredProjectsHeader}` + " thumb"}>Featured Projects</h2>
+          <div className={styles.projectCarousel}>
+            <div className={`${styles.projectThumbnail}` + " thumb"}></div>
+            <div className={`${styles.projectThumbnail}` + " thumb"}></div>
+            <div className={`${styles.projectThumbnail}` + " thumb"}></div>
+          </div>
+          <h3 className={`${styles.allProjectsLink}` + " thumb"}>All Projects</h3>
+        </div>
+        <p className={`${styles.pageFooter}` + " footer"}>GitHub | Email me</p>
       </section>
     </main>
   );
