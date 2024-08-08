@@ -207,6 +207,17 @@
   .dipShadowWrap {
     bottom: calc((var(--tapeBottomDistance)) - 6dvh);
   }
+
+  .helloHeader {
+    font-size: 1.5em;
+  }
+
+  .helloSubheader {
+    font-size: 1.5em;
+  }
+  .helloScrollNotice {
+    font-size: 1.2em;
+  }
 }
 
 /* Tablet and Smaller Desktop */
@@ -214,6 +225,66 @@
   .intro {
     flex-direction: column;
   }
+}
+
+/* Mobile Landscape */
+@media (max-height: 450px) {
+  .helloHeader {
+    font-size: 7vh;
+  }
+
+  .helloSubheader {
+    font-size: 7vh;
+  }
+
+  .helloScrollNotice {
+    position: static;
+    font-size: 5vh;
+    padding: 0px;
+  }  
+}
+
+
+/* Height Stop */
+@media (max-height: 350px) {
+  .intro {
+    height: 349px;
+  }
+  .hiddenProjectBackground {
+    height: 349px;
+  }
+  .helloHeader {
+    font-size: 24px;
+  }
+
+  .helloSubheader {
+    font-size: 24px;
+  }
+
+  .helloScrollNotice {
+    position: static;
+    font-size: 20px;
+  }  
+}
+
+/* Width Stop */
+@media (max-width: 290px) {
+  .intro {
+    width: 289px;
+  }
+  .hiddenProjectBackground {
+    width: 289px;
+  }
+  .helloHeader {
+    font-size: 24px;
+  }
+  .helloSubheader {
+    font-size: 24px;
+  }
+  .helloScrollNotice {
+    position: static;
+    font-size: 20px;
+  }  
 }
 
 /* Dark Mode */
