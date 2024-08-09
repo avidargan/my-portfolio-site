@@ -280,6 +280,10 @@
   overflow: hidden;
 }
 
+.featuredProjectsHeader:focus {
+  outline: none 
+}
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
 }
